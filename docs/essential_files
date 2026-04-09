@@ -1,0 +1,123 @@
+# Below are the main config files for ansible to run
+    1. ansible.cfg
+    2. inventory file
+    3. .ansible-navigator.yml
+    4. playbook
+    5. ~/.vimrc
+
+# Ansible config file:
+Default file location of this file is /etc/ansible/ansible.cfg
+But best practice is to create a config file in side each ansible project
+
+Sample config file
+
+[defaults]
+inventory = path/to/the/inventory/file
+remote_user = username
+ask_pass = true/false
+
+[privilege_escalations]
+become = true/false
+become_method = sudo/su
+become_user = username
+become_ask_pass = false
+
+# Inventory file
+We can define the inventory path inside ansible.cfg file
+by default it will take the /etc/hosts/hosts file for inventory
+
+Sample config file
+
+[prod]                              #groups will be configure in this brackets
+10.10.10.21                         #Hosts under this group
+10.10.10.22
+
+[test]
+10.10.10.23
+
+[dev]
+10.10.10.24
+
+[devops:children]                   #groups with sub/children groups 
+prod                                #group names under the devops group
+dev
+
+# ~/.ansible-navigator.yml file
+This file will be configured inside the user home dorectory, 
+This contains the navigator configuration details,
+
+Sample ~/.ansible-navigator.yml file
+
+---
+    ansible-navigator:
+        execution-environment:
+            image: image name along with the FQCN (Fully Qualified Container Name) address
+            pull:
+                policy: missing
+    playbook-artifact:
+        enabled: false
+
+# Playbook
+Playbook is a yaml language file which consists of plays and tasks
+Playbook Consists of multiple plays and multiple tasks under one play
+
+play books are written in YAML language: YET ANOTHER MARKUP LANGUAGE
+# YAML:-
+it always starts with ---
+it contains lists, information, sub-information
+it contains the information in lists 
+And All List parameters are starts with '-' and information will not contain - in starting
+And sub-information will have more white space Than the information line
+for Ex:
+data:
+- name      - age       - state
+    ansible     32          karnataka
+    redhat      23              bengaluru
+    terraform   64          Telangana
+    jenkins     56              hyderabad
+
+    In YAML: 
+       - name               # list
+            ansible
+            redhat
+            terraform
+            jenkins         # information
+       
+       - age                # list
+            32
+            23
+            64
+            56              # information
+       
+       - state              # list
+            karnataka       # information
+                bengaluru   # sub-information (more white space)
+            telangana       # information
+                hyderabad   # sub-information (more white space)
+
+# Sample Playbook
+
+---
+  - name: create folder and file
+    hosts: devops
+    tasks:
+      - name: create a file
+        ansible.builtin.file:
+            path: /home/student/first-folder
+            state: directory
+      - name: create a file
+        ansible.builtin.file:
+            path: /home/student/first-file
+            state: touch
+
+# ~/.vimrc
+set ai
+set tabstop=2
+set cursorcolumn
+set expandtab
+
+
+
+
+
+
